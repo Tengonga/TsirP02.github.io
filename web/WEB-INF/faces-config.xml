@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="2.2"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+              http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd">
+    
+    <!-- Navegación desde bienvenida -->
+    <navigation-rule>
+        <from-view-id>/bienvenida.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>categorias</from-outcome>
+            <to-view-id>/categorias.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Navegación desde categorías -->
+    <navigation-rule>
+        <from-view-id>/categorias.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>audi</from-outcome>
+            <to-view-id>/audi.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>bmw</from-outcome>
+            <to-view-id>/bmw.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>mercedes</from-outcome>
+            <to-view-id>/mercedes.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>toyota</from-outcome>
+            <to-view-id>/toyota.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>carrito</from-outcome>
+            <to-view-id>/carrito.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Navegación desde productos -->
+    <navigation-rule>
+        <from-view-id>*.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>categorias</from-outcome>
+            <to-view-id>/categorias.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>facturacion</from-outcome>
+            <to-view-id>/facturacion.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Navegación logout -->
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>logout</from-outcome>
+            <to-view-id>/bienvenida.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Configuración de i18n -->
+    <application>
+        <resource-bundle>
+            <base-name>resources.i18n.messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <locale-config>
+            <default-locale>es</default-locale>
+            <supported-locale>en</supported-locale>
+            <supported-locale>ca</supported-locale>
+        </locale-config>
+    </application>
+    
+</faces-config>

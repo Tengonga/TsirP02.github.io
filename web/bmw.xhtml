@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">BMW - #{msg['app.titulo']}</ui:define>
+        
+        <ui:define name="styles">
+            <style>
+                .product-card {
+                    border: none;
+                    border-radius: 15px;
+                    overflow: hidden;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    height: 100%;
+                }
+                .product-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+                }
+                .product-image {
+                    width: 100%;
+                    height: 200px;
+                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 80px;
+                }
+                .product-body {
+                    padding: 20px;
+                }
+                .product-name {
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #333;
+                    margin-bottom: 10px;
+                }
+                .product-price {
+                    font-size: 24px;
+                    color: #4facfe;
+                    font-weight: bold;
+                    margin-bottom: 15px;
+                }
+                .btn-add {
+                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                    border: none;
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 8px;
+                }
+                .btn-add:hover {
+                    transform: scale(1.05);
+                }
+                .brand-header {
+                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+                    color: white;
+                    padding: 40px;
+                    border-radius: 15px;
+                    margin-bottom: 40px;
+                    text-align: center;
+                }
+            </style>
+        </ui:define>
+        
+        <ui:define name="content">
+            <div class="brand-header">
+                <h1>🅱️ #{msg['marca.bmw']}</h1>
+                <p class="mb-0">The Ultimate Driving Machine</p>
+            </div>
+            
+            <h:form>
+                <div class="row g-4">
+                    <ui:repeat value="#{productoBean.productosBmw}" var="producto">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card product-card">
+                                <div class="product-image">
+                                    🚙
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">#{producto.nombre}</h3>
+                                    <div class="product-price">
+                                        <h:outputText value="#{producto.precio}">
+                                            <f:convertNumber type="currency" 
+                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </div>
+                                    <h:commandButton value="#{msg['app.agregar']}" 
+                                                     action="#{productoBean.agregarAlCarrito(producto)}"
+                                                     styleClass="btn btn-primary btn-add">
+                                        <f:ajax execute="@form" render="@none"/>
+                                    </h:commandButton>
+                                </div>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <h:commandButton value="#{msg['app.continuar']}" 
+                                     action="categorias"
+                                     styleClass="btn btn-secondary btn-lg"/>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

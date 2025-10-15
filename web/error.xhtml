@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:head>
+        <title>Login Error</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+        <style>
+            body {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .error-card {
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                padding: 40px;
+                max-width: 500px;
+                width: 100%;
+            }
+            .error-icon {
+                width: 100px;
+                height: 100px;
+                margin: 0 auto 25px;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 50px;
+            }
+            .btn-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                padding: 12px 30px;
+                font-size: 16px;
+                border-radius: 8px;
+            }
+            h2 {
+                color: #d63031;
+                margin-bottom: 20px;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <div class="error-card text-center">
+            <!-- Icono de error -->
+            <div class="error-icon">
+                ⚠️
+            </div>
+            
+            <!-- Título -->
+            <h2>Authentication Error</h2>
+            <p class="mb-4">Invalid user name or password</p>
+            
+            <div class="alert alert-danger text-start" role="alert">
+                <strong>Access Denied:</strong> Please enter a user name and password that is authorized 
+                to access this application. For this application, this means a user that has been 
+                created in the file realm and has been assigned to the group of <strong>clientUser</strong>.
+            </div>
+            
+            <!-- Botón para volver -->
+            <h:form>
+                <h:commandButton value="Back to Login" 
+                                 action="#{null}" 
+                                 onclick="window.location.href='login.xhtml'; return false;"
+                                 styleClass="btn btn-primary"/>
+            </h:form>
+            
+            <div class="mt-4">
+                <small class="text-muted">Need help? Contact the administrator</small>
+            </div>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    </h:body>
+</html>

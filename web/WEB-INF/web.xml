@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    
+    <!-- Welcome file -->
+    <welcome-file-list>
+        <welcome-file>bienvenida.xhtml</welcome-file>
+    </welcome-file-list>
+    
+    <!-- JSF Servlet -->
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    
+    <!-- Security Constraint -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Páginas Protegidas</web-resource-name>
+            <url-pattern>/categorias.xhtml</url-pattern>
+            <url-pattern>/audi.xhtml</url-pattern>
+            <url-pattern>/bmw.xhtml</url-pattern>
+            <url-pattern>/mercedes.xhtml</url-pattern>
+            <url-pattern>/toyota.xhtml</url-pattern>
+            <url-pattern>/carrito.xhtml</url-pattern>
+            <url-pattern>/facturacion.xhtml</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>clientUser</role-name>
+        </auth-constraint>
+    </security-constraint>
+    
+    <!-- Login Config -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/error.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    
+    <security-role>
+        <role-name>clientUser</role-name>
+    </security-role>
+</web-app>
