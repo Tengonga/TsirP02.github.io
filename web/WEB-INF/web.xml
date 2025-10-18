@@ -2,15 +2,15 @@
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
-         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    
-    <!-- Welcome file -->
+
+    <!-- Página de bienvenida -->
     <welcome-file-list>
         <welcome-file>bienvenida.xhtml</welcome-file>
     </welcome-file-list>
-    
-    <!-- JSF Servlet -->
+
+    <!-- Configuración del servlet de JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -20,16 +20,14 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
-    
-    <!-- Security Constraint -->
+
+    <!-- ======================================== -->
+    <!--   ÁREA SEGURA (requiere login)           -->
+    <!-- ======================================== -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Páginas Protegidas</web-resource-name>
-            <url-pattern>/categorias.xhtml</url-pattern>
-            <url-pattern>/audi.xhtml</url-pattern>
-            <url-pattern>/bmw.xhtml</url-pattern>
-            <url-pattern>/mercedes.xhtml</url-pattern>
-            <url-pattern>/toyota.xhtml</url-pattern>
+            <web-resource-name>Área Protegida</web-resource-name>
+            <!-- Solo estas páginas pedirán autenticación -->
             <url-pattern>/carrito.xhtml</url-pattern>
             <url-pattern>/facturacion.xhtml</url-pattern>
         </web-resource-collection>
@@ -37,8 +35,26 @@
             <role-name>clientUser</role-name>
         </auth-constraint>
     </security-constraint>
-    
-    <!-- Login Config -->
+
+    <!-- ======================================== -->
+    <!--(sin login)-->
+    <!-- ======================================== -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Páginas Públicas</web-resource-name>
+            <!-- NO tienen auth-constraint -->
+            <url-pattern>/categorias.xhtml</url-pattern>
+            <url-pattern>/audi.xhtml</url-pattern>
+            <url-pattern>/bmw.xhtml</url-pattern>
+            <url-pattern>/mercedes.xhtml</url-pattern>
+            <url-pattern>/toyota.xhtml</url-pattern>
+            <url-pattern>/bienvenida.xhtml</url-pattern>
+            <url-pattern>/login.xhtml</url-pattern>
+            <url-pattern>/error.xhtml</url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
+    <!-- Configuración de Login -->
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
@@ -46,7 +62,8 @@
             <form-error-page>/error.xhtml</form-error-page>
         </form-login-config>
     </login-config>
-    
+
+    <!-- Rol de usuario -->
     <security-role>
         <role-name>clientUser</role-name>
     </security-role>

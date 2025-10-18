@@ -70,4 +70,43 @@
         <ui:define name="content">
             <div class="brand-header">
                 <h1>🅰️ #{msg['marca.audi']}</h1>
-                <p class="mb-0">Premium German Engineering</p>
+                <p class="mb-0">A la vanguardia de la técnica</p>
+            </div>
+            
+            <h:form>
+                <div class="row g-4">
+                    <ui:repeat value="#{productoBean.productosAudi}" var="producto">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card product-card">
+                                <div class="product-image">
+                                    🚙
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">#{producto.nombre}</h3>
+                                    <div class="product-price">
+                                        <h:outputText value="#{producto.precio}">
+                                            <f:convertNumber type="currency" 
+                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </div>
+                                    <h:commandButton value="#{msg['app.agregar']}" 
+                                                     action="#{productoBean.agregarAlCarrito(producto)}"
+                                                     styleClass="btn btn-primary btn-add">
+                                        <f:ajax execute="@form" render="@none"/>
+                                    </h:commandButton>
+                                </div>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <h:commandButton value="#{msg['app.continuar']}" 
+                                     action="categorias"
+                                     styleClass="btn btn-secondary btn-lg"/>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
