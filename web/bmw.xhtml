@@ -69,8 +69,10 @@
         
         <ui:define name="content">
             <div class="brand-header">
-                <h1>🅱️ #{msg['marca.bmw']}</h1>
-                <p class="mb-0">El placer de conducir</p>
+                <img src="./Imagenes/BMW.png" width="240" height="240"> </img>
+                <h1></h1>
+                <h1></h1>
+                <p class="mb-0" >El placer de conducir</p>
             </div>
             
             <h:form>
@@ -79,7 +81,7 @@
                         <div class="col-md-6 col-lg-4">
                             <div class="card product-card">
                                 <div class="product-image">
-                                    🚙
+                                    <img src="#{producto.imagen}" width="420" height="200" style="object-fit:cover;"> </img>
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-name">#{producto.nombre}</h3>
