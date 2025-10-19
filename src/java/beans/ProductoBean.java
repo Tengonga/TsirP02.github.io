@@ -20,36 +20,36 @@ public class ProductoBean {
     // Productos Audi
     public List<Producto> getProductosAudi() {
         List<Producto> lista = new ArrayList<>();
-        lista.add(new Producto("Audi A3", "Audi", 35000, "resources/images/audi_a3.jpg"));
-        lista.add(new Producto("Audi A4", "Audi", 45000, "resources/images/audi_a4.jpg"));
-        lista.add(new Producto("Audi Q5", "Audi", 55000, "resources/images/audi_q5.jpg"));
+        lista.add(new Producto("Audi RS2 Avant", "Audi", 55000, "https://www.classicandsportscar.com/sites/default/files/styles/article/public/2023-11/Classic-and-Sports-Car-Buying-Guide-Audi-RS2-Avant-14.png?itok=0PAkN2i5"));
+        lista.add(new Producto("Audi S4 B5", "Audi", 10000, "resources/images/audi_a4.jpg"));
+        lista.add(new Producto("Audi TT Mk1", "Audi", 6000, "resources/images/audi_q5.jpg"));
         return lista;
     }
     
     // Productos BMW
     public List<Producto> getProductosBmw() {
         List<Producto> lista = new ArrayList<>();
-        lista.add(new Producto("BMW Serie 3", "BMW", 42000, "resources/images/bmw_3.jpg"));
-        lista.add(new Producto("BMW Serie 5", "BMW", 58000, "resources/images/bmw_5.jpg"));
-        lista.add(new Producto("BMW X5", "BMW", 68000, "resources/images/bmw_x5.jpg"));
+        lista.add(new Producto("BMW M3 E36", "BMW", 25000, "resources/images/bmw_3.jpg"));
+        lista.add(new Producto("BMW M5 E39", "BMW", 34999, "resources/images/bmw_5.jpg"));
+        lista.add(new Producto("BMW Z3 M Coupe", "BMW", 68000, "resources/images/bmw_x5.jpg"));
         return lista;
     }
     
     // Productos Mercedes
     public List<Producto> getProductosMercedes() {
         List<Producto> lista = new ArrayList<>();
-        lista.add(new Producto("Mercedes Clase A", "Mercedes", 38000, "resources/images/merc_a.jpg"));
-        lista.add(new Producto("Mercedes Clase C", "Mercedes", 48000, "resources/images/merc_c.jpg"));
-        lista.add(new Producto("Mercedes GLE", "Mercedes", 65000, "resources/images/merc_gle.jpg"));
+        lista.add(new Producto("Mercedes C36 AMG", "Mercedes", 14000, "resources/images/merc_a.jpg"));
+        lista.add(new Producto("Mercedes E55 AMG", "Mercedes", 17000, "resources/images/merc_c.jpg"));
+        lista.add(new Producto("Mercedes SLK", "Mercedes", 6500, "resources/images/merc_gle.jpg"));
         return lista;
     }
     
     // Productos Toyota
     public List<Producto> getProductosToyota() {
         List<Producto> lista = new ArrayList<>();
-        lista.add(new Producto("Toyota Corolla", "Toyota", 25000, "resources/images/toyota_corolla.jpg"));
-        lista.add(new Producto("Toyota Camry", "Toyota", 32000, "resources/images/toyota_camry.jpg"));
-        lista.add(new Producto("Toyota RAV4", "Toyota", 38000, "resources/images/toyota_rav4.jpg"));
+        lista.add(new Producto("Toyota Supra Mk4", "Toyota", 70000, "resources/images/toyota_corolla.jpg"));
+        lista.add(new Producto("Toyota Celica GT4 Carlos Sainz", "Toyota", 36000, "resources/images/toyota_camry.jpg"));
+        lista.add(new Producto("Toyota MR2", "Toyota", 15000, "resources/images/toyota_rav4.jpg"));
         return lista;
     }
     

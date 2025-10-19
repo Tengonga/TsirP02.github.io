@@ -69,7 +69,7 @@
         
         <ui:define name="content">
             <div class="brand-header">
-                <h1>🅰️ #{msg['marca.audi']}</h1>
+                <img src="./Imagenes/logo audi.png" width="140" height="115"> </img>
                 <p class="mb-0">A la vanguardia de la técnica</p>
             </div>
             
@@ -79,7 +79,8 @@
                         <div class="col-md-6 col-lg-4">
                             <div class="card product-card">
                                 <div class="product-image">
-                                    🚙
+                                    <img src="#{producto.imagen}" width="420" height="200" style="object-fit:cover;"> </img>
+                                        
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-name">#{producto.nombre}</h3>
