@@ -27,6 +27,7 @@
             <url-pattern>/categorias.xhtml</url-pattern>
         </web-resource-collection>
         <auth-constraint>
+            <description>Acceso a los recursos de usuario</description>
             <role-name>clientUser</role-name>
         </auth-constraint>
     </security-constraint>
