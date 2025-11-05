@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee                               http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
     <!-- Página de bienvenida -->
     <welcome-file-list>
         <welcome-file>bienvenida.xhtml</welcome-file>
     </welcome-file-list>
+    
     <!-- Configuración del servlet de JSF -->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -14,6 +19,7 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    
     <!-- ======================================== -->
     <!--   ÁREA SEGURA (requiere login)           -->
     <!-- ======================================== -->
@@ -31,14 +37,17 @@
             <role-name>clientUser</role-name>
         </auth-constraint>
     </security-constraint>
-    <!-- Configuración de Login -->
+    
+    <!-- Configuración de Login - VERSIÓN CORREGIDA -->
     <login-config>
         <auth-method>FORM</auth-method>
+        <realm-name>file</realm-name>  <!-- ¡ESTA LÍNEA FALTABA! -->
         <form-login-config>
             <form-login-page>/login.xhtml</form-login-page>
             <form-error-page>/loginError.xhtml</form-error-page>
         </form-login-config>
     </login-config>
+    
     <!-- Rol de usuario -->
     <security-role>
         <description/>

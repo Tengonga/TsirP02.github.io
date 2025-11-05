@@ -64,13 +64,10 @@
                 created in the file realm and has been assigned to the group of <strong>clientUser</strong>.
             </div>
             
-            <!-- Botón para volver -->
-            <h:form>
-                <h:commandButton value="Back to Login" 
-                                 action="#{null}" 
-                                 onclick="window.location.href='login.xhtml'; return false;"
-                                 styleClass="btn btn-primary"/>
-            </h:form>
+            <!-- Botón para volver - VERSIÓN CORREGIDA -->
+            <h:button value="Back to Login" 
+                     outcome="login.xhtml" 
+                     styleClass="btn btn-primary"/>
             
             <div class="mt-4">
                 <small class="text-muted">Need help? Contact the administrator</small>
