@@ -79,9 +79,9 @@
                                 <h:form styleClass="d-inline">
                                     <h:commandLink action="carrito" styleClass="nav-link">
                                         🛒 #{msg['app.carrito']}
-                                        <span class="cart-badge" rendered="#{not carritoBean.vacio}">
-                                            #{carritoBean.cantidad}
-                                        </span>
+                                        <h:outputText value="#{carritoBean.cantidad}" 
+                                                      styleClass="cart-badge" 
+                                                      rendered="#{not carritoBean.vacio}"/>
                                     </h:commandLink>
                                 </h:form>
                             </li>

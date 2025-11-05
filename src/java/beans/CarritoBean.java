@@ -34,15 +34,27 @@ public class CarritoBean implements Serializable {
         return productos.isEmpty();
     }
     
-    public boolean tieneTodosLasCategorias() {
+    // MÉTODO CORREGIDO - Con prefijo 'get'
+    public boolean getTieneTodosLasCategorias() {
+        if (productos.isEmpty()) {
+            return false;
+        }
+        
         Set<String> categorias = new HashSet<>();
         for (Producto p : productos) {
-            categorias.add(p.getCategoria());
+            if (p.getCategoria() != null) {
+                categorias.add(p.getCategoria());
+            }
         }
         return categorias.size() >= 4; // 4 marcas mínimo
     }
     
     public void limpiar() {
         productos.clear();
+    }
+    
+    // Método para remover producto individual
+    public void removerProducto(Producto producto) {
+        productos.remove(producto);
     }
 }

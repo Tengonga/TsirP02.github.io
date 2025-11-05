@@ -68,7 +68,6 @@
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">#{msg['app.nombre']} *</label>
                                 <h:inputText id="nombre" 
-                                             value="#{facturacionBean.nombre}" 
                                              styleClass="form-control"
                                              required="true"
                                              requiredMessage="El nombre es obligatorio">
@@ -80,7 +79,6 @@
                             <div class="mb-3">
                                 <label for="apellidos" class="form-label">#{msg['app.apellidos']} *</label>
                                 <h:inputText id="apellidos" 
-                                             value="#{facturacionBean.apellidos}" 
                                              styleClass="form-control"
                                              required="true"
                                              requiredMessage="Los apellidos son obligatorios">
@@ -90,4 +88,54 @@
                             </div>
                         </div>
                         
-                        <!-- Método de Pago -->
+                        <!-- Resumen de compra -->
+                        <div class="form-section">
+                            <h4 class="mb-4">Resumen de Compra</h4>
+                            <ui:repeat value="#{carritoBean.productos}" var="item">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>#{item.nombre} (#{item.categoria})</span>
+                                    <strong>
+                                        <h:outputText value="#{item.precio}">
+                                            <f:convertNumber type="currency" 
+                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </strong>
+                                </div>
+                            </ui:repeat>
+                            <hr/>
+                            <div class="d-flex justify-content-between">
+                                <strong>Total:</strong>
+                                <strong class="h5">
+                                    <h:outputText value="#{carritoBean.total}">
+                                        <f:convertNumber type="currency" 
+                                                       currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                       maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="total-display">
+                            <h:outputText value="#{carritoBean.total}">
+                                <f:convertNumber type="currency" 
+                                               currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                               maxFractionDigits="0"/>
+                            </h:outputText>
+                        </div>
+                        
+                        <h:commandButton value="Confirmar Compra" 
+                                       action="bienvenida"
+                                       styleClass="btn btn-purchase mb-3"/>
+                        
+                        <h:commandButton value="Volver al Carrito" 
+                                       action="carrito"
+                                       styleClass="btn btn-secondary w-100"/>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>
