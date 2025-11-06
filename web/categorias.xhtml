@@ -23,12 +23,10 @@
                     transform: translateY(-10px);
                     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
                 }
-                .category-icon {
-                    font-size: 80px;
-                    padding: 40px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    text-align: center;
+                .carousel-image {
+                    height: 200px;
+                    object-fit: cover;
+                    width: 100%;
                 }
                 .category-body {
                     padding: 25px;
@@ -70,28 +68,27 @@
                 <div class="row g-4">
                     <!-- Categoría Audi -->
                     <div class="col-md-6 col-lg-3">
-    <h:commandLink action="audi" styleClass="text-decoration-none">
-        <div class="card category-card">
-            
-                    <div id="carouselAudi" class="carousel slide">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="./Imagenes/audi-rs2-avant-1994-02.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/audi-s4-b5-1999.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/audi-tt-mk1-1998.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                        </div>
-                    </div>
+                        <h:commandLink action="audi" styleClass="text-decoration-none">
+                            <div class="card category-card">
+                                <div id="carouselAudi" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="./Imagenes/audi-rs2-avant-1994-02.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/audi-s4-b5-1999.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/audi-tt-mk1-1998.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="category-body">
                                     <h3 class="category-title">#{msg['marca.audi']}</h3>
                                     <p class="category-description">A la vanguardia de la técnica</p>
                                     <span class="badge bg-primary">Ver modelos</span>
                                 </div>
-        </div>
+                            </div>
                         </h:commandLink>
                     </div>
                     
@@ -99,20 +96,19 @@
                     <div class="col-md-6 col-lg-3">
                         <h:commandLink action="bmw" styleClass="text-decoration-none">
                             <div class="card category-card">
-                                
-                    <div id="carouselBMW" class="carousel slide">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="./Imagenes/bmw-m3-e36-1997.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/bmw-m5-e39-1999.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/bmw-z3-m-coupe-1998.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                        </div>
-                    </div>
+                                <div id="carouselBMW" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="./Imagenes/bmw-m3-e36-1997.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/bmw-m5-e39-1999.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/bmw-z3-m-coupe-1998.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="category-body">
                                     <h3 class="category-title">#{msg['marca.bmw']}</h3>
                                     <p class="category-description">El placer de conducir</p>
@@ -125,21 +121,20 @@
                     <!-- Categoría Mercedes -->
                     <div class="col-md-6 col-lg-3">
                         <h:commandLink action="mercedes" styleClass="text-decoration-none">
-                            
                             <div class="card category-card">
-                    <div id="carouselMercedes" class="carousel slide">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="./Imagenes/Mercedes-Benz-C36-AMG-W202-1995.jpg" width="420" height="200" style="object-fit:cover;" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/Mercedes-Benz-E55-AMG-W210-2000.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/Mercedes-SLK-R170-1996.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                        </div>
-                    </div>
+                                <div id="carouselMercedes" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="./Imagenes/Mercedes-Benz-C36-AMG-W202-1995.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/Mercedes-Benz-E55-AMG-W210-2000.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/Mercedes-SLK-R170-1996.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="category-body">
                                     <h3 class="category-title">#{msg['marca.mercedes']}</h3>
                                     <p class="category-description">Lo mejor o nada</p>
@@ -153,20 +148,19 @@
                     <div class="col-md-6 col-lg-3">
                         <h:commandLink action="toyota" styleClass="text-decoration-none">
                             <div class="card category-card">
-                                
-                    <div id="carouselToyota" class="carousel slide">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="./Imagenes/toyota-supra-mk4-1997.jpg" width="420" height="200" style="object-fit:cover;" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/Toyota-celica-GT4-1992-CS.jpg" class="d-block w-100" width="420" height="200" />
-                            </div>
-                            <div class="carousel-item">
-                                <img src="./Imagenes/Toyota-MR2-1994.jpg" width="420" height="200" style="object-fit:cover;" />
-                            </div>
-                        </div>
-                    </div>
+                                <div id="carouselToyota" class="carousel slide">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="./Imagenes/toyota-supra-mk4-1997.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/Toyota-celica-GT4-1992-CS.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="./Imagenes/Toyota-MR2-1994.jpg" class="d-block w-100 carousel-image" />
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="category-body">
                                     <h3 class="category-title">#{msg['marca.toyota']}</h3>
                                     <p class="category-description">Vamos a lugares</p>
@@ -177,9 +171,9 @@
                     </div>
                 </div>
                 
-              
+                <!-- Mensaje informativo -->
                 <div class="alert alert-info mt-5 text-center" role="alert">
-                    <strong>?? Tip:</strong> Necesitas al menos un coche de cada marca para proceder a la facturación
+                    <strong>💡 Tip:</strong> Necesitas al menos un coche de cada marca para proceder a la facturación
                 </div>
             </h:form>
         </ui:define>

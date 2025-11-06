@@ -55,7 +55,7 @@
         <ui:define name="content">
             <div class="billing-header">
                 <h1>💳 #{msg['app.facturacion']}</h1>
-                <p class="mb-0">Completa tu compra</p>
+                <p class="mb-0">Completa tu compra de forma segura</p>
             </div>
             
             <h:form id="billingForm">
@@ -66,8 +66,9 @@
                             <h4 class="mb-4">Información Personal</h4>
                             
                             <div class="mb-3">
-                                <label for="nombre" class="form-label">#{msg['app.nombre']} *</label>
+                                <h:outputLabel for="nombre" value="Nombre *" styleClass="form-label"/>
                                 <h:inputText id="nombre" 
+                                             value="#{facturacionBean.nombre}"
                                              styleClass="form-control"
                                              required="true"
                                              requiredMessage="El nombre es obligatorio">
@@ -77,8 +78,9 @@
                             </div>
                             
                             <div class="mb-3">
-                                <label for="apellidos" class="form-label">#{msg['app.apellidos']} *</label>
+                                <h:outputLabel for="apellidos" value="Apellidos *" styleClass="form-label"/>
                                 <h:inputText id="apellidos" 
+                                             value="#{facturacionBean.apellidos}"
                                              styleClass="form-control"
                                              required="true"
                                              requiredMessage="Los apellidos son obligatorios">
@@ -97,7 +99,7 @@
                                     <strong>
                                         <h:outputText value="#{item.precio}">
                                             <f:convertNumber type="currency" 
-                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           currencySymbol="€" 
                                                            maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
@@ -109,7 +111,7 @@
                                 <strong class="h5">
                                     <h:outputText value="#{carritoBean.total}">
                                         <f:convertNumber type="currency" 
-                                                       currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                       currencySymbol="€" 
                                                        maxFractionDigits="0"/>
                                     </h:outputText>
                                 </strong>
@@ -121,13 +123,13 @@
                         <div class="total-display">
                             <h:outputText value="#{carritoBean.total}">
                                 <f:convertNumber type="currency" 
-                                               currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                               currencySymbol="€" 
                                                maxFractionDigits="0"/>
                             </h:outputText>
                         </div>
                         
                         <h:commandButton value="Confirmar Compra" 
-                                       action="bienvenida"
+                                       action="#{facturacionBean.procesarFacturacion}"
                                        styleClass="btn btn-purchase mb-3"/>
                         
                         <h:commandButton value="Volver al Carrito" 
