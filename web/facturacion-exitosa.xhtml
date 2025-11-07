@@ -107,10 +107,10 @@
                                 </strong>
                             </div>
                             <div class="summary-item">
-                                <span>Cambio Devuelto:</span>
-                                <strong class="change-positive">
-                                    <h:outputText value="#{facturacionBean.cambio}">
-                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
+                                <span>Tarjeta caduca:</span>
+                                <strong>
+                                    <h:outputText value="#{facturacionBean.fechaCaducidad}">
+                                        <f:convertDateTime pattern="MM/yyyy"/>
                                     </h:outputText>
                                 </strong>
                             </div>
@@ -161,10 +161,10 @@
                         <div class="text-center mt-4 no-print">
                             <h:form>
                                 <h:commandButton value="🛒 Realizar Nueva Compra" 
-                                               action="categorias"
+                                               action="#{facturacionBean.irACategorias}"
                                                styleClass="btn btn-primary btn-lg me-3"/>
                                 <h:commandButton value="🏠 Ir al Inicio" 
-                                               action="bienvenida"
+                                               action="#{facturacionBean.irABienvenida}"
                                                styleClass="btn btn-secondary btn-lg"/>
                             </h:form>
                         </div>

@@ -65,7 +65,7 @@
         
         <ui:define name="content">
             <div class="billing-header">
-                <h1>💳 #{msg['app.facturacion']}</h1>
+                <h1>#{msg['app.facturacion']}</h1>
                 <p class="mb-0">Completa tu compra de forma segura</p>
             </div>
             
@@ -121,6 +121,20 @@
                                 <h:message for="tarjetaCredito" styleClass="text-danger"/>
                             </div>
                             
+                            <!-- Fecha de Caducidad -->
+                            <div class="mb-3">
+                                <h:outputLabel for="fechaCaducidad" value="Fecha de Caducidad *" styleClass="form-label"/>
+                                <h:inputText id="fechaCaducidad" 
+                                             value="#{facturacionBean.fechaCaducidad}"
+                                             styleClass="form-control"
+                                             required="true"
+                                             requiredMessage="La fecha de caducidad es obligatoria">
+                                    <f:convertDateTime pattern="MM/yyyy"/>
+                                </h:inputText>
+                                <div class="input-hint">Formato: MM/AAAA (Ejemplo: 12/2025)</div>
+                                <h:message for="fechaCaducidad" styleClass="text-danger"/>
+                            </div>
+                            
                             <div class="mb-3">
                                 <h:outputLabel for="importePagado" value="Importe a Pagar (€) *" styleClass="form-label"/>
                                 <h:inputText id="importePagado" 
@@ -131,12 +145,8 @@
                                     <f:validateDoubleRange minimum="0.01"/>
                                 </h:inputText>
                                 <div class="input-hint">
-                                    Debe ser mayor o igual al total de la compra: 
-                                    <strong>
-                                        <h:outputText value="#{carritoBean.total}">
-                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
-                                        </h:outputText>
-                                    </strong>
+                                    <strong>Ingrese el importe que desea pagar</strong><br/>
+                                    Puede ser cualquier cantidad
                                 </div>
                                 <h:message for="importePagado" styleClass="text-danger"/>
                             </div>
@@ -157,7 +167,7 @@
                             </ui:repeat>
                             <hr/>
                             <div class="d-flex justify-content-between">
-                                <strong>Total:</strong>
+                                <strong>Total de la compra:</strong>
                                 <strong class="h5">
                                     <h:outputText value="#{carritoBean.total}">
                                         <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
@@ -176,18 +186,15 @@
                         
                         <!-- Información de pago -->
                         <div class="payment-info">
-                            <h5>💡 Información de Pago</h5>
+                            <h5>Información de Pago</h5>
                             <p class="small mb-2">
-                                <strong>Total a pagar:</strong> 
+                                <strong>Total de la compra:</strong> 
                                 <h:outputText value="#{carritoBean.total}">
                                     <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
                                 </h:outputText>
                             </p>
                             <p class="small mb-0">
-                                <strong>Importe mínimo:</strong> 
-                                <h:outputText value="#{carritoBean.total}">
-                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
-                                </h:outputText>
+                                <strong>Flexibilidad:</strong> Pague cualquier importe que desee
                             </p>
                         </div>
                         
