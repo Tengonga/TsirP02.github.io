@@ -28,10 +28,6 @@
                     align-items: center;
                     justify-content: space-between;
                 }
-                .item-icon {
-                    font-size: 40px;
-                    margin-right: 20px;
-                }
                 .item-info {
                     flex: 1;
                 }
@@ -49,6 +45,18 @@
                     font-size: 22px;
                     font-weight: bold;
                     color: #667eea;
+                    margin-right: 15px;
+                }
+                .btn-remove {
+                    background: #dc3545;
+                    border: none;
+                    color: white;
+                    padding: 8px 12px;
+                    border-radius: 5px;
+                    font-size: 14px;
+                }
+                .btn-remove:hover {
+                    background: #c82333;
                 }
                 .total-section {
                     background: white;
@@ -86,6 +94,9 @@
                 <p class="mb-0">Revisa tus productos seleccionados</p>
             </div>
             
+            <!-- Mensajes -->
+            <h:messages globalOnly="false" styleClass="messages" infoClass="alert alert-success" errorClass="alert alert-danger" />
+            
             <h:form>
                 <h:panelGroup rendered="#{carritoBean.vacio}">
                     <div class="empty-cart">
@@ -104,17 +115,25 @@
                             <h4 class="mb-3">Productos (#{carritoBean.cantidad})</h4>
                             <ui:repeat value="#{carritoBean.productos}" var="item">
                                 <div class="cart-item">
-                                    <div class="item-icon">🚗</div>
                                     <div class="item-info">
                                         <div class="item-name">#{item.nombre}</div>
                                         <div class="item-category">#{item.categoria}</div>
                                     </div>
-                                    <div class="item-price">
-                                        <h:outputText value="#{item.precio}">
-                                            <f:convertNumber type="currency" 
-                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
-                                                           maxFractionDigits="0"/>
-                                        </h:outputText>
+                                    <div class="d-flex align-items-center">
+                                        <div class="item-price">
+                                            <h:outputText value="#{item.precio}">
+                                                <f:convertNumber type="currency" 
+                                                               currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                               maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </div>
+                                        <!-- BOTÓN ELIMINAR -->
+                                        <h:commandButton value="❌" 
+                                                       action="#{carritoBean.eliminarProducto(item)}"
+                                                       styleClass="btn btn-remove"
+                                                       title="Eliminar producto">
+                                            <f:ajax render="@form" />
+                                        </h:commandButton>
                                     </div>
                                 </div>
                             </ui:repeat>

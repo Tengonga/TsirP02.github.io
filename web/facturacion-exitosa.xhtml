@@ -1,0 +1,176 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <ui:composition template="template.xhtml">
+        <ui:define name="title">Compra Exitosa - #{msg['app.titulo']}</ui:define>
+        
+        <ui:define name="styles">
+            <style>
+                .success-header {
+                    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                    color: white;
+                    padding: 40px;
+                    border-radius: 15px;
+                    margin-bottom: 30px;
+                    text-align: center;
+                }
+                .success-card {
+                    background: white;
+                    border-radius: 15px;
+                    padding: 30px;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                    margin-bottom: 20px;
+                }
+                .success-icon {
+                    font-size: 80px;
+                    margin-bottom: 20px;
+                }
+                .summary-item {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #eee;
+                }
+                .summary-total {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 15px 0;
+                    border-top: 2px solid #667eea;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+                .change-positive {
+                    color: #43e97b;
+                    font-weight: bold;
+                }
+                .print-section {
+                    border: 2px dashed #667eea;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin-top: 20px;
+                    background: #f8f9fa;
+                }
+                @media print {
+                    .no-print {
+                        display: none !important;
+                    }
+                    .success-card {
+                        box-shadow: none;
+                        border: 1px solid #ddd;
+                    }
+                    .success-header {
+                        background: #43e97b !important;
+                        -webkit-print-color-adjust: exact;
+                    }
+                }
+            </style>
+        </ui:define>
+        
+        <ui:define name="content">
+            <div class="success-header">
+                <div class="success-icon">✅</div>
+                <h1>¡Compra Realizada con Éxito!</h1>
+                <p class="mb-0">Gracias por tu compra, #{facturacionBean.nombre}</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="success-card">
+                        <h3 class="mb-4">Resumen de tu Compra</h3>
+                        
+                        <!-- Información del Cliente -->
+                        <div class="mb-4">
+                            <h5>Información del Cliente</h5>
+                            <div class="summary-item">
+                                <span>Nombre:</span>
+                                <strong>#{facturacionBean.nombre} #{facturacionBean.apellidos}</strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Tarjeta:</span>
+                                <strong>**** **** **** #{facturacionBean.tarjetaCredito.substring(facturacionBean.tarjetaCredito.length() - 4)}</strong>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalles del Pago -->
+                        <div class="mb-4">
+                            <h5>Detalles del Pago</h5>
+                            <div class="summary-item">
+                                <span>Importe Pagado:</span>
+                                <strong>
+                                    <h:outputText value="#{facturacionBean.importePagado}">
+                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </strong>
+                            </div>
+                            <div class="summary-item">
+                                <span>Cambio Devuelto:</span>
+                                <strong class="change-positive">
+                                    <h:outputText value="#{facturacionBean.cambio}">
+                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </strong>
+                            </div>
+                        </div>
+                        
+                        <!-- Resumen de Productos -->
+                        <div class="mb-4">
+                            <h5>Productos Comprados</h5>
+                            <ui:repeat value="#{carritoBean.productos}" var="item">
+                                <div class="summary-item">
+                                    <span>#{item.nombre} (#{item.categoria})</span>
+                                    <strong>
+                                        <h:outputText value="#{item.precio}">
+                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </strong>
+                                </div>
+                            </ui:repeat>
+                        </div>
+                        
+                        <!-- Total -->
+                        <div class="summary-total">
+                            <span>Total de la Compra:</span>
+                            <strong>
+                                <h:outputText value="#{carritoBean.total}">
+                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </strong>
+                        </div>
+                        
+                        <!-- Información adicional -->
+                        <div class="alert alert-info mt-4">
+                            <h6>📧 Confirmación Enviada</h6>
+                            <p class="mb-0">Se ha enviado un correo de confirmación a tu dirección de email. 
+                            Tu factura estará disponible en tu área de cliente.</p>
+                        </div>
+                        
+                        <!-- Sección de Impresión -->
+                        <div class="print-section text-center no-print">
+                            <h5>🖨️ ¿Necesitas una copia?</h5>
+                            <p class="mb-3">Puedes imprimir este comprobante para tus registros.</p>
+                            <button type="button" onclick="window.print()" class="btn btn-primary btn-lg">
+                                🖨️ Imprimir Comprobante
+                            </button>
+                        </div>
+                        
+                        <!-- Botones de acción -->
+                        <div class="text-center mt-4 no-print">
+                            <h:form>
+                                <h:commandButton value="🛒 Realizar Nueva Compra" 
+                                               action="categorias"
+                                               styleClass="btn btn-primary btn-lg me-3"/>
+                                <h:commandButton value="🏠 Ir al Inicio" 
+                                               action="bienvenida"
+                                               styleClass="btn btn-secondary btn-lg"/>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ui:define>
+    </ui:composition>
+</html>

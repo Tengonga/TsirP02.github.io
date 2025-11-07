@@ -50,6 +50,28 @@
             <from-outcome>facturacion</from-outcome>
             <to-view-id>/facturacion.xhtml</to-view-id>
         </navigation-case>
+        <!-- NUEVA NAVEGACIÓN -->
+        <navigation-case>
+            <from-outcome>facturacion-exitosa</from-outcome>
+            <to-view-id>/facturacion-exitosa.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>bienvenida</from-outcome>
+            <to-view-id>/bienvenida.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- Navegación desde facturación exitosa -->
+    <navigation-rule>
+        <from-view-id>/facturacion-exitosa.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>categorias</from-outcome>
+            <to-view-id>/categorias.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>bienvenida</from-outcome>
+            <to-view-id>/bienvenida.xhtml</to-view-id>
+        </navigation-case>
     </navigation-rule>
     
     <!-- Navegación logout -->

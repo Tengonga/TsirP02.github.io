@@ -10,7 +10,6 @@ import java.util.List;
 @RequestScoped
 public class ProductoBean {
     
-    // Método para obtener CarritoBean sin inyección
     private CarritoBean getCarritoBean() {
         FacesContext context = FacesContext.getCurrentInstance();
         return context.getApplication().evaluateExpressionGet(
@@ -53,8 +52,16 @@ public class ProductoBean {
         return lista;
     }
     
-    public String agregarAlCarrito(Producto producto) {
+    // MODIFICADO: Ahora se queda en la misma página
+    public void agregarAlCarrito(Producto producto) {
         getCarritoBean().agregarProducto(producto);
-        return "categorias?faces-redirect=true";
+        
+        // Mensaje de confirmación
+        FacesContext.getCurrentInstance().addMessage(null, 
+            new javax.faces.application.FacesMessage(
+                javax.faces.application.FacesMessage.SEVERITY_INFO,
+                "Producto añadido", 
+                producto.getNombre() + " se ha añadido al carrito"
+            ));
     }
 }

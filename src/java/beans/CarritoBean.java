@@ -18,6 +18,11 @@ public class CarritoBean implements Serializable {
         productos.add(producto);
     }
     
+    // NUEVO MÉTODO: Eliminar producto del carrito
+    public void eliminarProducto(Producto producto) {
+        productos.remove(producto);
+    }
+    
     public List<Producto> getProductos() {
         return productos;
     }
@@ -34,24 +39,7 @@ public class CarritoBean implements Serializable {
         return productos.isEmpty();
     }
     
-    // MÉTODO CORREGIDO - JSF buscará automáticamente getTieneTodosLasCategorias()
     public boolean getTieneTodosLasCategorias() {
-        if (productos.isEmpty()) {
-            return false;
-        }
-        
-        Set<String> categorias = new HashSet<>();
-        for (Producto p : productos) {
-            if (p.getCategoria() != null) {
-                categorias.add(p.getCategoria());
-            }
-        }
-        return categorias.size() >= 4; // 4 marcas mínimo
-    }
-    
-    // O puedes usar el prefijo "is" que también funciona:
-    /*
-    public boolean isTieneTodosLasCategorias() {
         if (productos.isEmpty()) {
             return false;
         }
@@ -64,7 +52,6 @@ public class CarritoBean implements Serializable {
         }
         return categorias.size() >= 4;
     }
-    */
     
     public void limpiar() {
         productos.clear();
