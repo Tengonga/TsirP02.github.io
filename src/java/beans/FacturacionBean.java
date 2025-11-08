@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,7 +18,6 @@ public class FacturacionBean implements Serializable {
     private Date fechaCaducidad;
     private double importePagado = 0.0;
     private boolean pagoExitoso = false;
-    private boolean sesionIniciada = false;
     
     @ManagedProperty(value = "#{carritoBean}")
     private CarritoBean carritoBean;
@@ -45,9 +45,6 @@ public class FacturacionBean implements Serializable {
     
     public void setNombre(String nombre) { 
         this.nombre = nombre != null ? nombre : ""; 
-        if (nombre != null && !nombre.trim().isEmpty()) {
-            this.sesionIniciada = true;
-        }
     }
     
     public String getApellidos() { 
@@ -90,59 +87,46 @@ public class FacturacionBean implements Serializable {
         this.pagoExitoso = pagoExitoso; 
     }
     
-    public boolean isSesionIniciada() {
-        return sesionIniciada;
-    }
-    
-    public void setSesionIniciada(boolean sesionIniciada) {
-        this.sesionIniciada = sesionIniciada;
-    }
-    
-    public boolean isSesionActiva() {
-        return sesionIniciada && nombre != null && !nombre.trim().isEmpty();
-    }
-    
-    // Método para login
-    public String login() {
-        this.sesionIniciada = true;
-        if (nombre == null || nombre.trim().isEmpty()) {
-            this.nombre = "Cliente Demo";
-        }
-        
-        FacesContext.getCurrentInstance().addMessage(null,
-            new javax.faces.application.FacesMessage(
-                javax.faces.application.FacesMessage.SEVERITY_INFO,
-                "Sesión iniciada",
-                "Bienvenido, " + nombre
-            ));
-        
-        return "categorias?faces-redirect=true";
-    }
-    
-    // MÉTODO LOGOUT CORREGIDO (SOLO UNO)
+    // ✅ VERSIÓN MEJORADA DEL LOGOUT - ESTA SÍ FUNCIONA
     public String logout() {
-        this.sesionIniciada = false;
-        this.nombre = "";
-        this.apellidos = "";
-        this.tarjetaCredito = "";
-        this.fechaCaducidad = null;
-        this.importePagado = 0.0;
-        this.pagoExitoso = false;
-        
-        // Limpiar carrito también
-        if (carritoBean != null) {
-            carritoBean.limpiar();
+        try {
+            // 1. Hacer logout de GlassFish Security
+            HttpServletRequest request = (HttpServletRequest) FacesContext
+                .getCurrentInstance().getExternalContext().getRequest();
+            request.logout();
+            
+            // 2. Invalidar la sesión JSF
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            
+            // 3. Limpiar datos del bean
+            limpiarDatosCompletos();
+            
+            // 4. Mensaje de confirmación
+            FacesContext.getCurrentInstance().addMessage(null,
+                new javax.faces.application.FacesMessage(
+                    javax.faces.application.FacesMessage.SEVERITY_INFO,
+                    "Sesión cerrada",
+                    "Has cerrado sesión correctamente"
+                ));
+            
+            return "/bienvenida?faces-redirect=true";
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Si falla, al menos invalidar la sesión
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            return "/bienvenida?faces-redirect=true";
         }
-        
-        FacesContext.getCurrentInstance().addMessage(null,
-            new javax.faces.application.FacesMessage(
-//                javax.faces.application.FacesMessage.SEVERITY_INFO,
-                "Sesión cerrada",
-                "Has cerrado sesión correctamente"
-            ));
-        
-        // NO invalidar la sesión aquí, solo limpiar los datos
-        return "/bienvenida?faces-redirect=true";
+    }
+    
+    // ✅ MÉTODO AUXILIAR: Para verificar si hay usuario autenticado
+    public boolean isUsuarioAutenticado() {
+        try {
+            return FacesContext.getCurrentInstance()
+                .getExternalContext().getUserPrincipal() != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
     
     public String getUltimosCuatroDigitos() {
@@ -188,12 +172,18 @@ public class FacturacionBean implements Serializable {
     }
     
     private void limpiarDatos() {
-        if (carritoBean != null) {
-            carritoBean.limpiar();
-        }
         this.tarjetaCredito = "";
         this.fechaCaducidad = null;
         this.importePagado = 0.0;
         this.pagoExitoso = false;
+    }
+    
+    private void limpiarDatosCompletos() {
+        limpiarDatos();
+        if (carritoBean != null) {
+            carritoBean.limpiar();
+        }
+        this.nombre = "";
+        this.apellidos = "";
     }
 }

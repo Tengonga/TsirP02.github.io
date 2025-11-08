@@ -57,20 +57,21 @@
         </style>
     </h:head>
     <h:body>
+        <!-- ✅ SIN internacionalización - siempre en inglés -->
         <div class="login-card">
             <!-- Logo -->
-             <div class="logo">
-                     <img src="./Imagenes/coche_logo.png" width="65" height="65" class="mr-4"> </img>
-                </div>
+            <div class="logo">
+                <img src="./Imagenes/coche_logo.png" width="65" height="65"/>
+            </div>
             
-            <!-- Título -->
+            <!-- Título en inglés -->
             <h2 class="text-center">Login</h2>
-            <p class="text-center text-muted mb-4">Enter your credentials</p>
+            <p class="text-center text-muted mb-4">Enter your credentials to access</p>
             
             <!-- Formulario de login (gestionado por GlassFish) -->
             <form method="POST" action="j_security_check">
                 <div class="mb-3">
-                    <label for="j_username" class="form-label">User:</label>
+                    <label for="j_username" class="form-label">Username:</label>
                     <input type="text" 
                            id="j_username" 
                            name="j_username" 
