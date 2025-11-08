@@ -85,13 +85,26 @@
                     font-size: 80px;
                     margin-bottom: 20px;
                 }
+                .currency-badge {
+                    background: #667eea;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    margin-left: 5px;
+                }
             </style>
         </ui:define>
         
         <ui:define name="content">
             <div class="cart-header">
                 <h1>🛒 #{msg['app.carrito']}</h1>
-                <p class="mb-0">Revisa tus productos seleccionados</p>
+                <p class="mb-0">
+                    #{idiomaBean.idioma == 'en' ? 'Review your selected products' : 
+                     idiomaBean.idioma == 'ca' ? 'Revisa els teus productes seleccionats' : 
+                     'Revisa tus productos seleccionados'}
+                    <span class="currency-badge">#{carritoBean.simboloMoneda}</span>
+                </p>
             </div>
             
             <!-- Mensajes -->
@@ -102,7 +115,11 @@
                     <div class="empty-cart">
                         <div class="empty-cart-icon">🛒</div>
                         <h3>#{msg['msg.carrito.vacio']}</h3>
-                        <p class="text-muted mb-4">Añade algunos coches a tu carrito</p>
+                        <p class="text-muted mb-4">
+                            #{idiomaBean.idioma == 'en' ? 'Add some cars to your cart' : 
+                             idiomaBean.idioma == 'ca' ? 'Afegeix alguns cotxes al teu carret' : 
+                             'Añade algunos coches a tu carrito'}
+                        </p>
                         <h:commandButton value="#{msg['app.continuar']}" 
                                          action="categorias"
                                          styleClass="btn btn-primary btn-lg"/>
@@ -112,7 +129,11 @@
                 <h:panelGroup rendered="#{not carritoBean.vacio}">
                     <div class="row">
                         <div class="col-lg-8">
-                            <h4 class="mb-3">Productos (#{carritoBean.cantidad})</h4>
+                            <h4 class="mb-3">
+                                #{idiomaBean.idioma == 'en' ? 'Products' : 
+                                 idiomaBean.idioma == 'ca' ? 'Productes' : 
+                                 'Productos'} (#{carritoBean.cantidad})
+                            </h4>
                             <ui:repeat value="#{carritoBean.productos}" var="item">
                                 <div class="cart-item">
                                     <div class="item-info">
@@ -121,9 +142,9 @@
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <div class="item-price">
-                                            <h:outputText value="#{item.precio}">
+                                            <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
                                                 <f:convertNumber type="currency" 
-                                                               currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                               currencySymbol="#{carritoBean.simboloMoneda}" 
                                                                maxFractionDigits="0"/>
                                             </h:outputText>
                                         </div>
@@ -131,7 +152,9 @@
                                         <h:commandButton value="❌" 
                                                        action="#{carritoBean.eliminarProducto(item)}"
                                                        styleClass="btn btn-remove"
-                                                       title="Eliminar producto">
+                                                       title="#{idiomaBean.idioma == 'en' ? 'Remove product' : 
+                                                              idiomaBean.idioma == 'ca' ? 'Eliminar producte' : 
+                                                              'Eliminar producto'}">
                                             <f:ajax render="@form" />
                                         </h:commandButton>
                                     </div>
@@ -141,18 +164,34 @@
                         
                         <div class="col-lg-4">
                             <div class="total-section">
-                                <h4 class="mb-4">Resumen</h4>
+                                <h4 class="mb-4">#{idiomaBean.idioma == 'en' ? 'Summary' : 
+                                                 idiomaBean.idioma == 'ca' ? 'Resum' : 
+                                                 'Resumen'}</h4>
+                                
+                                <!-- Información de moneda -->
+                                <div class="alert alert-info mb-3">
+                                    <small>
+                                        <strong>💱 #{idiomaBean.idioma == 'en' ? 'Currency' : 
+                                                   idiomaBean.idioma == 'ca' ? 'Moneda' : 
+                                                   'Moneda'}:</strong> 
+                                        #{carritoBean.simboloMoneda} 
+                                        #{idiomaBean.idioma == 'en' ? 'USD' : 'EUR'}
+                                    </small>
+                                </div>
+                                
                                 <div class="d-flex justify-content-between mb-3">
-                                    <span>Productos:</span>
+                                    <span>#{idiomaBean.idioma == 'en' ? 'Products' : 
+                                          idiomaBean.idioma == 'ca' ? 'Productes' : 
+                                          'Productos'}:</span>
                                     <strong>#{carritoBean.cantidad}</strong>
                                 </div>
                                 <hr/>
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <span class="h5 mb-0">#{msg['app.total']}:</span>
                                     <span class="total-amount">
-                                        <h:outputText value="#{carritoBean.total}">
+                                        <h:outputText value="#{carritoBean.totalConvertido}">
                                             <f:convertNumber type="currency" 
-                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           currencySymbol="#{carritoBean.simboloMoneda}" 
                                                            maxFractionDigits="0"/>
                                         </h:outputText>
                                     </span>

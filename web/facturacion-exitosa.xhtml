@@ -6,7 +6,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
     
     <ui:composition template="template.xhtml">
-        <ui:define name="title">Compra Exitosa - #{msg['app.titulo']}</ui:define>
+        <ui:define name="title">#{msg['facturacion.exito.titulo']} - #{msg['app.titulo']}</ui:define>
         
         <ui:define name="styles">
             <style>
@@ -47,12 +47,24 @@
                     color: #43e97b;
                     font-weight: bold;
                 }
+                .change-negative {
+                    color: #dc3545;
+                    font-weight: bold;
+                }
                 .print-section {
                     border: 2px dashed #667eea;
                     border-radius: 10px;
                     padding: 20px;
                     margin-top: 20px;
                     background: #f8f9fa;
+                }
+                .currency-badge {
+                    background: #667eea;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    margin-left: 5px;
                 }
                 @media print {
                     .no-print {
@@ -73,58 +85,89 @@
         <ui:define name="content">
             <div class="success-header">
                 <div class="success-icon">✅</div>
-                <h1>¡Compra Realizada con Éxito!</h1>
-                <p class="mb-0">Gracias por tu compra, #{facturacionBean.nombre}</p>
+                <h1>#{msg['facturacion.exito.titulo']}</h1>
+                <p class="mb-0">
+                    #{msg['facturacion.exito.gracias']} 
+                    #{facturacionBean.nombre}
+                </p>
             </div>
             
             <div class="row justify-content-center">
                 <div class="col-lg-8">
                     <div class="success-card">
-                        <h3 class="mb-4">Resumen de tu Compra</h3>
+                        <h3 class="mb-4">#{msg['facturacion.exito.resumen']}</h3>
+                        
+                        <!-- Información de moneda -->
+                        <div class="alert alert-info mb-4">
+                            <strong>💱 #{msg['app.moneda']}:</strong> 
+                            #{carritoBean.simboloMoneda} 
+                            #{msg['app.tipo.moneda']}
+                            <span class="currency-badge">#{carritoBean.simboloMoneda}</span>
+                        </div>
                         
                         <!-- Información del Cliente -->
                         <div class="mb-4">
-                            <h5>Información del Cliente</h5>
+                            <h5>#{msg['facturacion.info.cliente']}</h5>
                             <div class="summary-item">
-                                <span>Nombre:</span>
+                                <span>#{msg['app.nombre']}:</span>
                                 <strong>#{facturacionBean.nombre} #{facturacionBean.apellidos}</strong>
                             </div>
                             <div class="summary-item">
-                                <span>Tarjeta:</span>
-                                <strong>**** **** **** #{facturacionBean.tarjetaCredito.substring(facturacionBean.tarjetaCredito.length() - 4)}</strong>
+                                <span>#{msg['app.tarjeta']}:</span>
+                                <strong>**** **** **** #{facturacionBean.ultimosCuatroDigitos}</strong>
                             </div>
                         </div>
                         
                         <!-- Detalles del Pago -->
                         <div class="mb-4">
-                            <h5>Detalles del Pago</h5>
+                            <h5>#{msg['facturacion.detalles.pago']}</h5>
                             <div class="summary-item">
-                                <span>Importe Pagado:</span>
+                                <span>#{msg['facturacion.importe.pagado']}:</span>
                                 <strong>
                                     <h:outputText value="#{facturacionBean.importePagado}">
-                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
+                                        <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="2"/>
                                     </h:outputText>
                                 </strong>
                             </div>
                             <div class="summary-item">
-                                <span>Tarjeta caduca:</span>
+                                <span>#{msg['app.caducidad']}:</span>
                                 <strong>
                                     <h:outputText value="#{facturacionBean.fechaCaducidad}">
                                         <f:convertDateTime pattern="MM/yyyy"/>
                                     </h:outputText>
                                 </strong>
                             </div>
+                            
+                            <!-- Información de diferencia de pago CORREGIDA DEFINITIVAMENTE -->
+                            <div class="summary-item">
+                                <span>#{msg['facturacion.estado.pago']}:</span>
+                                <ui:fragment rendered="#{facturacionBean.diferenciaPago gt 0}">
+                                    <strong class="change-positive">
+                                        #{facturacionBean.mensajeDiferenciaPago}
+                                    </strong>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{facturacionBean.diferenciaPago lt 0}">
+                                    <strong class="change-negative">
+                                        #{facturacionBean.mensajeDiferenciaPago}
+                                    </strong>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{facturacionBean.diferenciaPago eq 0}">
+                                    <strong class="change-positive">
+                                        #{facturacionBean.mensajeDiferenciaPago}
+                                    </strong>
+                                </ui:fragment>
+                            </div>
                         </div>
                         
                         <!-- Resumen de Productos -->
                         <div class="mb-4">
-                            <h5>Productos Comprados</h5>
+                            <h5>#{msg['facturacion.productos.comprados']}</h5>
                             <ui:repeat value="#{carritoBean.productos}" var="item">
                                 <div class="summary-item">
                                     <span>#{item.nombre} (#{item.categoria})</span>
                                     <strong>
-                                        <h:outputText value="#{item.precio}">
-                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                        <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
+                                            <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
                                 </div>
@@ -133,37 +176,38 @@
                         
                         <!-- Total -->
                         <div class="summary-total">
-                            <span>Total de la Compra:</span>
+                            <span>#{msg['app.total']}:</span>
                             <strong>
-                                <h:outputText value="#{carritoBean.total}">
-                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                <h:outputText value="#{carritoBean.totalConvertido}">
+                                    <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                                 </h:outputText>
                             </strong>
                         </div>
                         
                         <!-- Información adicional -->
                         <div class="alert alert-info mt-4">
-                            <h6>📧 Confirmación Enviada</h6>
-                            <p class="mb-0">Se ha enviado un correo de confirmación a tu dirección de email. 
-                            Tu factura estará disponible en tu área de cliente.</p>
+                            <h6>📧 #{msg['facturacion.confirmacion.enviada']}</h6>
+                            <p class="mb-0">
+                                #{msg['facturacion.confirmacion.mensaje']}
+                            </p>
                         </div>
                         
                         <!-- Sección de Impresión -->
                         <div class="print-section text-center no-print">
-                            <h5>🖨️ ¿Necesitas una copia?</h5>
-                            <p class="mb-3">Puedes imprimir este comprobante para tus registros.</p>
+                            <h5>🖨️ #{msg['facturacion.necesitas.copia']}</h5>
+                            <p class="mb-3">#{msg['facturacion.imprimir.comprobante']}</p>
                             <button type="button" onclick="window.print()" class="btn btn-primary btn-lg">
-                                🖨️ Imprimir Comprobante
+                                🖨️ #{msg['facturacion.imprimir']}
                             </button>
                         </div>
                         
                         <!-- Botones de acción -->
                         <div class="text-center mt-4 no-print">
                             <h:form>
-                                <h:commandButton value="🛒 Realizar Nueva Compra" 
+                                <h:commandButton value="#{msg['facturacion.nueva.compra']}" 
                                                action="#{facturacionBean.irACategorias}"
                                                styleClass="btn btn-primary btn-lg me-3"/>
-                                <h:commandButton value="🏠 Ir al Inicio" 
+                                <h:commandButton value="#{msg['facturacion.ir.inicio']}" 
                                                action="#{facturacionBean.irABienvenida}"
                                                styleClass="btn btn-secondary btn-lg"/>
                             </h:form>

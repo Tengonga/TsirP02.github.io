@@ -28,4 +28,19 @@ public class IdiomaBean implements Serializable {
     public void cambiarIdioma(String idioma) {
         setIdioma(idioma);
     }
+    
+    // NUEVO: Método para obtener el nombre del idioma
+    public String getNombreIdioma() {
+        switch (locale.getLanguage()) {
+            case "es": return "Español";
+            case "en": return "English";
+            case "ca": return "Català";
+            default: return "Español";
+        }
+    }
+    
+    // NUEVO: Método para verificar si es inglés
+    public boolean isIngles() {
+        return "en".equals(locale.getLanguage());
+    }
 }

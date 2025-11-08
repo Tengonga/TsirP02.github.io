@@ -60,13 +60,42 @@
                     color: #6c757d;
                     margin-top: 0.25rem;
                 }
+                .payment-difference {
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    text-align: center;
+                    font-weight: bold;
+                }
+                .payment-positive {
+                    background: #d4edda;
+                    color: #155724;
+                    border: 1px solid #c3e6cb;
+                }
+                .payment-negative {
+                    background: #f8d7da;
+                    color: #721c24;
+                    border: 1px solid #f5c6cb;
+                }
+                .payment-exact {
+                    background: #d1ecf1;
+                    color: #0c5460;
+                    border: 1px solid #bee5eb;
+                }
+                .currency-info {
+                    background: #e2e3e5;
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin: 10px 0;
+                    font-size: 0.9rem;
+                }
             </style>
         </ui:define>
         
         <ui:define name="content">
             <div class="billing-header">
-                <h1>#{msg['app.facturacion']}</h1>
-                <p class="mb-0">Completa tu compra de forma segura</p>
+                <h1>💳 #{msg['app.facturacion']}</h1>
+                <p class="mb-0">#{msg['facturacion.subtitulo']}</p>
             </div>
             
             <!-- Mensajes de error/éxito -->
@@ -77,27 +106,27 @@
                     <div class="col-lg-8">
                         <!-- Información del Cliente -->
                         <div class="form-section">
-                            <h4 class="mb-4">Información Personal</h4>
+                            <h4 class="mb-4">#{msg['facturacion.info.personal']}</h4>
                             
                             <div class="mb-3">
-                                <h:outputLabel for="nombre" value="Nombre *" styleClass="form-label"/>
+                                <h:outputLabel for="nombre" value="#{msg['app.nombre']} *" styleClass="form-label"/>
                                 <h:inputText id="nombre" 
                                              value="#{facturacionBean.nombre}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="El nombre es obligatorio">
+                                             requiredMessage="#{msg['validation.required.name']}">
                                     <f:validateLength minimum="2" maximum="50"/>
                                 </h:inputText>
                                 <h:message for="nombre" styleClass="text-danger"/>
                             </div>
                             
                             <div class="mb-3">
-                                <h:outputLabel for="apellidos" value="Apellidos *" styleClass="form-label"/>
+                                <h:outputLabel for="apellidos" value="#{msg['app.apellidos']} *" styleClass="form-label"/>
                                 <h:inputText id="apellidos" 
                                              value="#{facturacionBean.apellidos}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="Los apellidos son obligatorios">
+                                             requiredMessage="#{msg['validation.required.lastname']}">
                                     <f:validateLength minimum="2" maximum="100"/>
                                 </h:inputText>
                                 <h:message for="apellidos" styleClass="text-danger"/>
@@ -106,71 +135,92 @@
                         
                         <!-- Información de Pago -->
                         <div class="form-section">
-                            <h4 class="mb-4">Información de Pago</h4>
+                            <h4 class="mb-4">#{msg['facturacion.info.pago']}</h4>
+                            
+                            <!-- Información de moneda -->
+                            <div class="currency-info">
+                                <strong>💱 #{msg['app.moneda']}:</strong>
+                                #{msg['app.tipo.moneda']}
+                                <span class="badge bg-secondary ms-2">
+                                    #{carritoBean.simboloMoneda} 
+                                    #{idiomaBean.idioma == 'en' ? 'USD' : 'EUR'}
+                                </span>
+                            </div>
                             
                             <div class="mb-3">
-                                <h:outputLabel for="tarjetaCredito" value="Tarjeta de Crédito *" styleClass="form-label"/>
+                                <h:outputLabel for="tarjetaCredito" value="#{msg['app.tarjeta']} *" styleClass="form-label"/>
                                 <h:inputText id="tarjetaCredito" 
                                              value="#{facturacionBean.tarjetaCredito}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="La tarjeta de crédito es obligatoria">
+                                             requiredMessage="#{msg['validation.required.creditcard']}">
                                     <f:validateLength minimum="16" maximum="19"/>
                                 </h:inputText>
-                                <div class="input-hint">Ejemplo: 1234 5678 9012 3456</div>
+                                <div class="input-hint">#{msg['facturacion.ejemplo.tarjeta']}</div>
                                 <h:message for="tarjetaCredito" styleClass="text-danger"/>
                             </div>
                             
                             <!-- Fecha de Caducidad -->
                             <div class="mb-3">
-                                <h:outputLabel for="fechaCaducidad" value="Fecha de Caducidad *" styleClass="form-label"/>
+                                <h:outputLabel for="fechaCaducidad" value="#{msg['app.caducidad']} *" styleClass="form-label"/>
                                 <h:inputText id="fechaCaducidad" 
                                              value="#{facturacionBean.fechaCaducidad}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="La fecha de caducidad es obligatoria">
+                                             requiredMessage="#{msg['validation.required.expiration.date']}">
                                     <f:convertDateTime pattern="MM/yyyy"/>
                                 </h:inputText>
-                                <div class="input-hint">Formato: MM/AAAA (Ejemplo: 12/2025)</div>
+                                <div class="input-hint">#{msg['facturacion.formato.fecha']}</div>
                                 <h:message for="fechaCaducidad" styleClass="text-danger"/>
                             </div>
                             
                             <div class="mb-3">
-                                <h:outputLabel for="importePagado" value="Importe a Pagar (€) *" styleClass="form-label"/>
+                                <h:outputLabel for="importePagado" value="#{msg['facturacion.importe.pagar']} (#{carritoBean.simboloMoneda}) *" styleClass="form-label"/>
                                 <h:inputText id="importePagado" 
                                              value="#{facturacionBean.importePagado}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="El importe a pagar es obligatorio">
+                                             requiredMessage="#{msg['validation.required.payment.amount']}">
                                     <f:validateDoubleRange minimum="0.01"/>
                                 </h:inputText>
                                 <div class="input-hint">
-                                    <strong>Ingrese el importe que desea pagar</strong><br/>
-                                    Puede ser cualquier cantidad
+                                    <strong>#{msg['facturacion.ingresar.importe']}</strong><br/>
+                                    #{msg['facturacion.importe.informativo']}
                                 </div>
                                 <h:message for="importePagado" styleClass="text-danger"/>
                             </div>
+                            
+                            <!-- Información de diferencia de pago (se actualiza con AJAX) -->
+                            <h:panelGroup rendered="#{facturacionBean.importePagado > 0}">
+                                <div class="payment-difference #{facturacionBean.diferenciaPago gt 0 ? 'payment-positive' : (facturacionBean.diferenciaPago lt 0 ? 'payment-negative' : 'payment-exact')}">
+                                    <h6>#{msg['facturacion.info.pago']}</h6>
+                                    <div>#{facturacionBean.mensajeDiferenciaPago}</div>
+                                    <small class="text-muted">
+                                        #{msg['facturacion.informativo']}
+                                    </small>
+                                </div>
+                            </h:panelGroup>
                         </div>
                         
                         <!-- Resumen de compra -->
                         <div class="form-section">
-                            <h4 class="mb-4">Resumen de Compra</h4>
+                            <h4 class="mb-4">#{msg['facturacion.resumen.compra']}</h4>
                             <ui:repeat value="#{carritoBean.productos}" var="item">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>#{item.nombre} (#{item.categoria})</span>
                                     <strong>
-                                        <h:outputText value="#{item.precio}">
-                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                        <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
+                                            <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
                                 </div>
                             </ui:repeat>
                             <hr/>
                             <div class="d-flex justify-content-between">
-                                <strong>Total de la compra:</strong>
+                                <strong>#{msg['app.total']}:</strong>
                                 <strong class="h5">
-                                    <h:outputText value="#{carritoBean.total}">
-                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                    <h:outputText value="#{carritoBean.totalConvertido}">
+                                        <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                                     </h:outputText>
                                 </strong>
                             </div>
@@ -179,30 +229,31 @@
                     
                     <div class="col-lg-4">
                         <div class="total-display">
-                            <h:outputText value="#{carritoBean.total}">
-                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                            <h:outputText value="#{carritoBean.totalConvertido}">
+                                <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                             </h:outputText>
                         </div>
                         
                         <!-- Información de pago -->
                         <div class="payment-info">
-                            <h5>Información de Pago</h5>
+                            <h5>💡 #{msg['facturacion.info.pago']}</h5>
                             <p class="small mb-2">
-                                <strong>Total de la compra:</strong> 
-                                <h:outputText value="#{carritoBean.total}">
-                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                <strong>#{msg['facturacion.total.compra']}:</strong> 
+                                <h:outputText value="#{carritoBean.totalConvertido}">
+                                    <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
                                 </h:outputText>
                             </p>
                             <p class="small mb-0">
-                                <strong>Flexibilidad:</strong> Pague cualquier importe que desee
+                                <strong>#{msg['facturacion.flexibilidad']}:</strong> 
+                                #{msg['facturacion.pago.flexible']}
                             </p>
                         </div>
                         
-                        <h:commandButton value="Realizar Pago" 
+                        <h:commandButton value="#{msg['app.comprar']}" 
                                        action="#{facturacionBean.procesarPago}"
                                        styleClass="btn btn-purchase mb-3 w-100"/>
                         
-                        <h:commandButton value="Volver al Carrito" 
+                        <h:commandButton value="#{msg['app.continuar']}" 
                                        action="carrito"
                                        styleClass="btn btn-secondary w-100"/>
                     </div>

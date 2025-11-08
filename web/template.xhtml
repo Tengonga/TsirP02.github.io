@@ -85,6 +85,7 @@
                                     </h:commandLink>
                                 </h:form>
                             </li>
+                            <!-- ACTUALIZAR EL SELECTOR DE IDIOMA EN template.xhtml: -->
                             <li class="nav-item">
                                 <h:form styleClass="d-inline">
                                     <h:selectOneMenu value="#{idiomaBean.idioma}" 
@@ -93,16 +94,22 @@
                                                      style="width: auto; display: inline-block; background: rgba(118,75,162,0.8); color: white; border: 1px solid white;">
                                         <f:selectItem itemValue="es" itemLabel="🇪🇸 ES"/>
                                         <f:selectItem itemValue="en" itemLabel="🇬🇧 EN"/>
+                                        <f:selectItem itemValue="ca" itemLabel="🇦🇩 CA"/>
                                     </h:selectOneMenu>
                                 </h:form>
                             </li>
+                            <!-- SOLO MODIFICAR LA PARTE DEL BOTÓN LOGIN/LOGOUT: -->
                             <li class="nav-item ms-2">
-                                <h:form>
-                                    <h:commandButton value="#{msg['app.logout']}" 
-                                                     action="#{facturacionBean.logout}"
-                                                     styleClass="btn btn-sm btn-logout"/>
-                                </h:form>
-                            </li>                        
+                                <h:commandButton value="Iniciar Sesión" 
+                                                action="#{facturacionBean.login}"
+                                                rendered="#{not facturacionBean.sesionActiva}"
+                                                styleClass="btn btn-outline-light btn-sm"/>
+
+                                <h:commandButton value="Cerrar Sesión" 
+                                                action="#{facturacionBean.logout}"
+                                                rendered="#{facturacionBean.sesionActiva}"
+                                                styleClass="btn btn-outline-light btn-sm"/>
+                            </li>                       
                         </ul>
                     </div>
                 </div>
