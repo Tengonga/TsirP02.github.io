@@ -136,35 +136,13 @@ public class FacturacionBean implements Serializable {
         
         FacesContext.getCurrentInstance().addMessage(null,
             new javax.faces.application.FacesMessage(
-                javax.faces.application.FacesMessage.SEVERITY_INFO,
+//                javax.faces.application.FacesMessage.SEVERITY_INFO,
                 "Sesión cerrada",
                 "Has cerrado sesión correctamente"
             ));
         
         // NO invalidar la sesión aquí, solo limpiar los datos
         return "/bienvenida?faces-redirect=true";
-    }
-    
-    // Cálculos de pago CORREGIDOS
-    public double getDiferenciaPago() {
-        if (carritoBean == null || carritoBean.getTotalConvertido() == 0) {
-            return importePagado;
-        }
-        double total = carritoBean.getTotalConvertido();
-        return importePagado - total;
-    }
-    
-    public String getMensajeDiferenciaPago() {
-        double diferencia = getDiferenciaPago();
-        String simbolo = carritoBean != null ? carritoBean.getSimboloMoneda() : "€";
-        
-        if (diferencia > 0) {
-            return String.format("+%.2f%s (Cambio a devolver)", diferencia, simbolo);
-        } else if (diferencia < 0) {
-            return String.format("%.2f%s (Falta por pagar)", diferencia, simbolo);
-        } else {
-            return String.format("0%s (Pago exacto)", simbolo);
-        }
     }
     
     public String getUltimosCuatroDigitos() {

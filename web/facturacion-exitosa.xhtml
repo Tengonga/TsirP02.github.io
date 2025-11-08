@@ -43,28 +43,12 @@
                     font-size: 18px;
                     font-weight: bold;
                 }
-                .change-positive {
-                    color: #43e97b;
-                    font-weight: bold;
-                }
-                .change-negative {
-                    color: #dc3545;
-                    font-weight: bold;
-                }
                 .print-section {
                     border: 2px dashed #667eea;
                     border-radius: 10px;
                     padding: 20px;
                     margin-top: 20px;
                     background: #f8f9fa;
-                }
-                .currency-badge {
-                    background: #667eea;
-                    color: white;
-                    padding: 2px 8px;
-                    border-radius: 12px;
-                    font-size: 0.8rem;
-                    margin-left: 5px;
                 }
                 @media print {
                     .no-print {
@@ -97,14 +81,6 @@
                     <div class="success-card">
                         <h3 class="mb-4">#{msg['facturacion.exito.resumen']}</h3>
                         
-                        <!-- Información de moneda -->
-                        <div class="alert alert-info mb-4">
-                            <strong>💱 #{msg['app.moneda']}:</strong> 
-                            #{carritoBean.simboloMoneda} 
-                            #{msg['app.tipo.moneda']}
-                            <span class="currency-badge">#{carritoBean.simboloMoneda}</span>
-                        </div>
-                        
                         <!-- Información del Cliente -->
                         <div class="mb-4">
                             <h5>#{msg['facturacion.info.cliente']}</h5>
@@ -116,6 +92,16 @@
                                 <span>#{msg['app.tarjeta']}:</span>
                                 <strong>**** **** **** #{facturacionBean.ultimosCuatroDigitos}</strong>
                             </div>
+                            <!-- ✅ CAMBIO: Fecha de caducidad movida aquí -->
+                            <div class="summary-item">
+                                <span>#{msg['app.caducidad']}:</span>
+                                <strong>
+                                    <h:outputText value="#{facturacionBean.fechaCaducidad}">
+                                        <!-- ✅ CAMBIO: Volver a formato MM/yyyy -->
+                                        <f:convertDateTime pattern="MM/yyyy"/>
+                                    </h:outputText>
+                                </strong>
+                            </div>
                         </div>
                         
                         <!-- Detalles del Pago -->
@@ -125,37 +111,9 @@
                                 <span>#{msg['facturacion.importe.pagado']}:</span>
                                 <strong>
                                     <h:outputText value="#{facturacionBean.importePagado}">
-                                        <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="2"/>
+                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
                                     </h:outputText>
                                 </strong>
-                            </div>
-                            <div class="summary-item">
-                                <span>#{msg['app.caducidad']}:</span>
-                                <strong>
-                                    <h:outputText value="#{facturacionBean.fechaCaducidad}">
-                                        <f:convertDateTime pattern="MM/yyyy"/>
-                                    </h:outputText>
-                                </strong>
-                            </div>
-                            
-                            <!-- Información de diferencia de pago CORREGIDA DEFINITIVAMENTE -->
-                            <div class="summary-item">
-                                <span>#{msg['facturacion.estado.pago']}:</span>
-                                <ui:fragment rendered="#{facturacionBean.diferenciaPago gt 0}">
-                                    <strong class="change-positive">
-                                        #{facturacionBean.mensajeDiferenciaPago}
-                                    </strong>
-                                </ui:fragment>
-                                <ui:fragment rendered="#{facturacionBean.diferenciaPago lt 0}">
-                                    <strong class="change-negative">
-                                        #{facturacionBean.mensajeDiferenciaPago}
-                                    </strong>
-                                </ui:fragment>
-                                <ui:fragment rendered="#{facturacionBean.diferenciaPago eq 0}">
-                                    <strong class="change-positive">
-                                        #{facturacionBean.mensajeDiferenciaPago}
-                                    </strong>
-                                </ui:fragment>
                             </div>
                         </div>
                         
@@ -166,20 +124,20 @@
                                 <div class="summary-item">
                                     <span>#{item.nombre} (#{item.categoria})</span>
                                     <strong>
-                                        <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
-                                            <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
+                                        <h:outputText value="#{item.precio}">
+                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
                                 </div>
                             </ui:repeat>
                         </div>
                         
-                        <!-- Total -->
+                        <!-- Total de la compra (solo informativo) -->
                         <div class="summary-total">
-                            <span>#{msg['app.total']}:</span>
+                            <span>#{msg['app.total']} de la compra:</span>
                             <strong>
-                                <h:outputText value="#{carritoBean.totalConvertido}">
-                                    <f:convertNumber type="currency" currencySymbol="#{carritoBean.simboloMoneda}" maxFractionDigits="0"/>
+                                <h:outputText value="#{carritoBean.total}">
+                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
                                 </h:outputText>
                             </strong>
                         </div>
