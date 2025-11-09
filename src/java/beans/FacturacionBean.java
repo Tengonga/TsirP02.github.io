@@ -98,7 +98,6 @@ public class FacturacionBean implements Serializable {
         this.pagoExitoso = pagoExitoso; 
     }
     
-    // ✅ LOGOUT MEJORADO
     public String logout() {
         try {
             HttpServletRequest request = (HttpServletRequest) 
@@ -111,7 +110,7 @@ public class FacturacionBean implements Serializable {
             
             limpiarDatosCompletos();
             
-            // Agregar mensaje flash para la siguiente página
+         
             FacesContext.getCurrentInstance()
                 .getExternalContext().getFlash()
                 .put("logoutSuccess", true);
@@ -120,7 +119,7 @@ public class FacturacionBean implements Serializable {
             
             return "/bienvenida?faces-redirect=true";
         } catch (ServletException e) {
-            // ✅ Logging correcto
+         
             logger.log(Level.SEVERE, "Error durante logout", e);
             FacesContext.getCurrentInstance()
                 .getExternalContext().invalidateSession();
@@ -182,6 +181,7 @@ public class FacturacionBean implements Serializable {
     }
     
     private void limpiarDatos() {
+        carritoBean.limpiar();
         this.tarjetaCredito = "";
         this.fechaCaducidad = null;
         this.importePagado = 0.0;
@@ -197,7 +197,6 @@ public class FacturacionBean implements Serializable {
         this.apellidos = "";
     }
     
-    // ✅ VALIDACIÓN DE FECHA DE CADUCIDAD
     public void validarFechaCaducidad(FacesContext context, 
                                       UIComponent component, 
                                       Object value) {
@@ -231,7 +230,6 @@ public class FacturacionBean implements Serializable {
     
     // En FacturacionBean.java
 
-    // ✅ NUEVO: Obtener importe pagado convertido según idioma
     public double getImportePagadoConvertido() {
         if (carritoBean.isIdiomaIngles() && carritoBean != null) {
             return importePagado * 1.10; // Convertir a dólares
@@ -239,7 +237,6 @@ public class FacturacionBean implements Serializable {
         return importePagado; // Mantener en euros
     }
 
-    // ✅ NUEVO: Método auxiliar para verificar si está en inglés
     private boolean isIdiomaIngles() {
         return idiomaBean != null && "en".equals(idiomaBean.getIdioma());
 }
