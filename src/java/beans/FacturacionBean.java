@@ -7,11 +7,22 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;  // ✅ CORRECTO
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
+import javax.servlet.ServletException;
 
 @ManagedBean
 @SessionScoped
 public class FacturacionBean implements Serializable {
+    
+    // ✅ Declarar el logger correctamente
+    private static final Logger logger = Logger.getLogger(FacturacionBean.class.getName());
+    
     private String nombre = "";
     private String apellidos = "";
     private String tarjetaCredito = "";
@@ -87,39 +98,36 @@ public class FacturacionBean implements Serializable {
         this.pagoExitoso = pagoExitoso; 
     }
     
-    // ✅ VERSIÓN MEJORADA DEL LOGOUT - ESTA SÍ FUNCIONA
+    // ✅ LOGOUT MEJORADO
     public String logout() {
         try {
-            // 1. Hacer logout de GlassFish Security
-            HttpServletRequest request = (HttpServletRequest) FacesContext
-                .getCurrentInstance().getExternalContext().getRequest();
+            HttpServletRequest request = (HttpServletRequest) 
+                FacesContext.getCurrentInstance()
+                .getExternalContext().getRequest();
             request.logout();
             
-            // 2. Invalidar la sesión JSF
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            FacesContext.getCurrentInstance()
+                .getExternalContext().invalidateSession();
             
-            // 3. Limpiar datos del bean
             limpiarDatosCompletos();
             
-            // 4. Mensaje de confirmación
-            FacesContext.getCurrentInstance().addMessage(null,
-                new javax.faces.application.FacesMessage(
-                    javax.faces.application.FacesMessage.SEVERITY_INFO,
-                    "Sesión cerrada",
-                    "Has cerrado sesión correctamente"
-                ));
+            // Agregar mensaje flash para la siguiente página
+            FacesContext.getCurrentInstance()
+                .getExternalContext().getFlash()
+                .put("logoutSuccess", true);
+            
+            logger.log(Level.INFO, "Usuario cerró sesión correctamente"); // ✅ CORRECTO
             
             return "/bienvenida?faces-redirect=true";
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            // Si falla, al menos invalidar la sesión
-            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        } catch (ServletException e) {
+            // ✅ Logging correcto
+            logger.log(Level.SEVERE, "Error durante logout", e);
+            FacesContext.getCurrentInstance()
+                .getExternalContext().invalidateSession();
             return "/bienvenida?faces-redirect=true";
         }
     }
     
-    // ✅ MÉTODO AUXILIAR: Para verificar si hay usuario autenticado
     public boolean isUsuarioAutenticado() {
         try {
             return FacesContext.getCurrentInstance()
@@ -139,8 +147,8 @@ public class FacturacionBean implements Serializable {
     public String procesarPago() {
         if (fechaCaducidad == null) {
             FacesContext.getCurrentInstance().addMessage(null,
-                new javax.faces.application.FacesMessage(
-                    javax.faces.application.FacesMessage.SEVERITY_ERROR,
+                new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
                     "Fecha de caducidad requerida",
                     "Por favor, ingrese la fecha de caducidad de su tarjeta"
                 ));
@@ -149,8 +157,8 @@ public class FacturacionBean implements Serializable {
         
         if (fechaCaducidad.before(new Date())) {
             FacesContext.getCurrentInstance().addMessage(null,
-                new javax.faces.application.FacesMessage(
-                    javax.faces.application.FacesMessage.SEVERITY_ERROR,
+                new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR,
                     "Tarjeta vencida",
                     "La fecha de caducidad de su tarjeta ha expirado"
                 ));
@@ -158,6 +166,8 @@ public class FacturacionBean implements Serializable {
         }
         
         this.pagoExitoso = true;
+        logger.log(Level.INFO, "Pago procesado para: {0} {1}", 
+                   new Object[]{nombre, apellidos});
         return "facturacion-exitosa?faces-redirect=true";
     }
     
@@ -186,4 +196,51 @@ public class FacturacionBean implements Serializable {
         this.nombre = "";
         this.apellidos = "";
     }
+    
+    // ✅ VALIDACIÓN DE FECHA DE CADUCIDAD
+    public void validarFechaCaducidad(FacesContext context, 
+                                      UIComponent component, 
+                                      Object value) {
+        if (value == null) {
+            throw new ValidatorException(
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Fecha requerida", 
+                    "La fecha de caducidad es obligatoria"));
+        }
+        
+        Date fecha = (Date) value;
+        Calendar hoy = Calendar.getInstance();
+        Calendar caducidad = Calendar.getInstance();
+        caducidad.setTime(fecha);
+        
+        // Comparar solo año y mes
+        if (caducidad.get(Calendar.YEAR) < hoy.get(Calendar.YEAR) ||
+            (caducidad.get(Calendar.YEAR) == hoy.get(Calendar.YEAR) &&
+             caducidad.get(Calendar.MONTH) < hoy.get(Calendar.MONTH))) {
+            
+            logger.log(Level.WARNING, "Intento de usar tarjeta vencida: {0}/{1}", 
+                       new Object[]{caducidad.get(Calendar.MONTH) + 1, 
+                                    caducidad.get(Calendar.YEAR)});
+            
+            throw new ValidatorException(
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Tarjeta vencida", 
+                    "La fecha de caducidad ha expirado"));
+        }
+    }
+    
+    // En FacturacionBean.java
+
+    // ✅ NUEVO: Obtener importe pagado convertido según idioma
+    public double getImportePagadoConvertido() {
+        if (carritoBean.isIdiomaIngles() && carritoBean != null) {
+            return importePagado * 1.10; // Convertir a dólares
+        }
+        return importePagado; // Mantener en euros
+    }
+
+    // ✅ NUEVO: Método auxiliar para verificar si está en inglés
+    private boolean isIdiomaIngles() {
+        return idiomaBean != null && "en".equals(idiomaBean.getIdioma());
+}
 }

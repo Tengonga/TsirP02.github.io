@@ -82,7 +82,7 @@ public class CarritoBean implements Serializable {
         return precio;
     }
     
-    private boolean isIdiomaIngles() {
+    public boolean isIdiomaIngles() {
         return idiomaBean != null && "en".equals(idiomaBean.getIdioma());
     }
     

@@ -50,6 +50,14 @@
                     margin-top: 20px;
                     background: #f8f9fa;
                 }
+                .currency-badge {
+                    background: #43e97b;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    margin-left: 5px;
+                }
                 @media print {
                     .no-print {
                         display: none !important;
@@ -73,6 +81,7 @@
                 <p class="mb-0">
                     #{msg['facturacion.exito.gracias']} 
                     #{facturacionBean.nombre}
+                    <span class="currency-badge">#{carritoBean.simboloMoneda}</span>
                 </p>
             </div>
             
@@ -92,12 +101,10 @@
                                 <span>#{msg['app.tarjeta']}:</span>
                                 <strong>**** **** **** #{facturacionBean.ultimosCuatroDigitos}</strong>
                             </div>
-                            <!-- ✅ CAMBIO: Fecha de caducidad movida aquí -->
                             <div class="summary-item">
                                 <span>#{msg['app.caducidad']}:</span>
                                 <strong>
                                     <h:outputText value="#{facturacionBean.fechaCaducidad}">
-                                        <!-- ✅ CAMBIO: Volver a formato MM/yyyy -->
                                         <f:convertDateTime pattern="MM/yyyy"/>
                                     </h:outputText>
                                 </strong>
@@ -110,8 +117,11 @@
                             <div class="summary-item">
                                 <span>#{msg['facturacion.importe.pagado']}:</span>
                                 <strong>
-                                    <h:outputText value="#{facturacionBean.importePagado}">
-                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="2"/>
+                                    <!-- ✅ CAMBIO: Usar importePagado convertido -->
+                                    <h:outputText value="#{facturacionBean.importePagadoConvertido}">
+                                        <f:convertNumber type="currency" 
+                                                       currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                       maxFractionDigits="2"/>
                                     </h:outputText>
                                 </strong>
                             </div>
@@ -124,20 +134,26 @@
                                 <div class="summary-item">
                                     <span>#{item.nombre} (#{item.categoria})</span>
                                     <strong>
-                                        <h:outputText value="#{item.precio}">
-                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                        <!-- ✅ CAMBIO: Usar precio convertido -->
+                                        <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
+                                            <f:convertNumber type="currency" 
+                                                           currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                           maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
                                 </div>
                             </ui:repeat>
                         </div>
                         
-                        <!-- Total de la compra (solo informativo) -->
+                        <!-- Total de la compra -->
                         <div class="summary-total">
                             <span>#{msg['app.total']} de la compra:</span>
                             <strong>
-                                <h:outputText value="#{carritoBean.total}">
-                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                <!-- ✅ CAMBIO: Usar total convertido -->
+                                <h:outputText value="#{carritoBean.totalConvertido}">
+                                    <f:convertNumber type="currency" 
+                                                   currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                   maxFractionDigits="0"/>
                                 </h:outputText>
                             </strong>
                         </div>

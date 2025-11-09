@@ -60,13 +60,24 @@
                     color: #6c757d;
                     margin-top: 0.25rem;
                 }
+                .currency-badge {
+                    background: #667eea;
+                    color: white;
+                    padding: 2px 8px;
+                    border-radius: 12px;
+                    font-size: 0.8rem;
+                    margin-left: 5px;
+                }
             </style>
         </ui:define>
         
         <ui:define name="content">
             <div class="billing-header">
                 <h1>#{msg['app.facturacion']}</h1>
-                <p class="mb-0">#{msg['facturacion.subtitulo']}</p>
+                <p class="mb-0">
+                    #{msg['facturacion.subtitulo']}
+                    <span class="currency-badge">#{carritoBean.simboloMoneda}</span>
+                </p>
             </div>
             
             <!-- Mensajes de error/éxito -->
@@ -109,9 +120,12 @@
                             <h4 class="mb-4">#{msg['facturacion.info.pago']}</h4>
                             
                             <!-- Información de moneda -->
-                            <div class="currency-info">
-                                <strong>💱 #{msg['app.moneda']}:</strong>
-                                #{msg['app.tipo.moneda']}
+                            <div class="alert alert-info mb-3">
+                                <small>
+                                    <strong>💱 #{msg['app.moneda']}:</strong> 
+                                    #{carritoBean.simboloMoneda} 
+                                    (#{idiomaBean.idioma == 'en' ? 'USD' : idiomaBean.idioma == 'ca' ? 'EUR' : 'EUR'})
+                                </small>
                             </div>
                             
                             <div class="mb-3">
@@ -120,7 +134,8 @@
                                              value="#{facturacionBean.tarjetaCredito}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="#{msg['required.creditcard']}">
+                                             requiredMessage="#{msg['required.creditcard']}"
+                                             maxlength="19">
                                     <f:validateLength minimum="16" maximum="19"/>
                                 </h:inputText>
                                 <div class="input-hint">#{msg['facturacion.ejemplo.tarjeta']}</div>
@@ -134,7 +149,8 @@
                                              value="#{facturacionBean.fechaCaducidad}"
                                              styleClass="form-control"
                                              required="true"
-                                             requiredMessage="#{msg['required.expiration.date']}">
+                                             requiredMessage="#{msg['required.expiration.date']}"
+                                             validator="#{facturacionBean.validarFechaCaducidad}">
                                     <f:convertDateTime pattern="MM/yyyy"/>
                                 </h:inputText>
                                 <div class="input-hint">#{msg['facturacion.formato.fecha']}</div>
@@ -142,7 +158,9 @@
                             </div>
                             
                             <div class="mb-3">
-                                <h:outputLabel for="importePagado" value="#{msg['facturacion.importe.pagar']} (€) *" styleClass="form-label"/>
+                                <h:outputLabel for="importePagado" 
+                                               value="#{msg['facturacion.importe.pagar']} (#{carritoBean.simboloMoneda}) *" 
+                                               styleClass="form-label"/>
                                 <h:inputText id="importePagado" 
                                              value="#{facturacionBean.importePagado}"
                                              styleClass="form-control"
@@ -152,6 +170,20 @@
                                 </h:inputText>
                                 <div class="input-hint">
                                     <strong>#{msg['facturacion.ingresar.importe']}</strong><br/>
+                                    <small class="text-muted">
+                                        #{idiomaBean.idioma == 'en' ? 
+                                          'Total to pay: ' : 
+                                          idiomaBean.idioma == 'ca' ? 
+                                          'Total a pagar: ' : 
+                                          'Total a pagar: '}
+                                        <strong>
+                                            <h:outputText value="#{carritoBean.totalConvertido}">
+                                                <f:convertNumber type="currency" 
+                                                               currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                               maxFractionDigits="2"/>
+                                            </h:outputText>
+                                        </strong>
+                                    </small>
                                 </div>
                                 <h:message for="importePagado" styleClass="text-danger"/>
                             </div>
@@ -160,12 +192,15 @@
                         <!-- Resumen de compra -->
                         <div class="form-section">
                             <h4 class="mb-4">#{msg['facturacion.resumen.compra']}</h4>
+                            
                             <ui:repeat value="#{carritoBean.productos}" var="item">
                                 <div class="d-flex justify-content-between mb-2">
                                     <span>#{item.nombre} (#{item.categoria})</span>
                                     <strong>
-                                        <h:outputText value="#{item.precio}">
-                                            <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                        <h:outputText value="#{carritoBean.convertirPrecio(item.precio)}">
+                                            <f:convertNumber type="currency" 
+                                                           currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                           maxFractionDigits="0"/>
                                         </h:outputText>
                                     </strong>
                                 </div>
@@ -174,8 +209,10 @@
                             <div class="d-flex justify-content-between">
                                 <strong>#{msg['app.total']}:</strong>
                                 <strong class="h5">
-                                    <h:outputText value="#{carritoBean.total}">
-                                        <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                    <h:outputText value="#{carritoBean.totalConvertido}">
+                                        <f:convertNumber type="currency" 
+                                                       currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                       maxFractionDigits="0"/>
                                     </h:outputText>
                                 </strong>
                             </div>
@@ -184,8 +221,10 @@
                     
                     <div class="col-lg-4">
                         <div class="total-display">
-                            <h:outputText value="#{carritoBean.total}">
-                                <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                            <h:outputText value="#{carritoBean.totalConvertido}">
+                                <f:convertNumber type="currency" 
+                                               currencySymbol="#{carritoBean.simboloMoneda}" 
+                                               maxFractionDigits="0"/>
                             </h:outputText>
                         </div>
                         
@@ -194,11 +233,17 @@
                             <h5>💡 #{msg['facturacion.info.pago']}</h5>
                             <p class="small mb-2">
                                 <strong>#{msg['facturacion.total.compra']}:</strong> 
-                                <h:outputText value="#{carritoBean.total}">
-                                    <f:convertNumber type="currency" currencySymbol="€" maxFractionDigits="0"/>
+                                <h:outputText value="#{carritoBean.totalConvertido}">
+                                    <f:convertNumber type="currency" 
+                                                   currencySymbol="#{carritoBean.simboloMoneda}" 
+                                                   maxFractionDigits="2"/>
                                 </h:outputText>
                             </p>
-                            
+                            <p class="small text-dark mb-0">
+                                <strong>💱 #{msg['app.moneda']}:</strong> 
+                                #{carritoBean.simboloMoneda} 
+                                #{idiomaBean.idioma == 'en' ? 'USD' : 'EUR'}
+                            </p>
                         </div>
                         
                         <h:commandButton value="#{msg['app.comprar']}" 
@@ -207,7 +252,8 @@
                         
                         <h:commandButton value="#{msg['app.continuar']}" 
                                        action="carrito"
-                                       styleClass="btn btn-secondary w-100"/>
+                                       styleClass="btn btn-secondary w-100"
+                                       immediate="true"/>
                     </div>
                 </div>
             </h:form>

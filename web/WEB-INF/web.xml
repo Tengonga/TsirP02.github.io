@@ -49,4 +49,18 @@
     <security-role>
         <role-name>clientUser</role-name>
     </security-role>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/error404.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error500.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/sessionExpired.xhtml</location>
+    </error-page>
+    
 </web-app>
