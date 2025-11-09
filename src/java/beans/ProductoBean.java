@@ -1,6 +1,7 @@
 package beans;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import java.util.ArrayList;
@@ -9,6 +10,34 @@ import java.util.List;
 @ManagedBean
 @RequestScoped
 public class ProductoBean {
+    
+    @ManagedProperty(value = "#{idiomaBean}")
+    private IdiomaBean idiomaBean;
+    
+    // Tasa de cambio fija (1 EUR = 1.10 USD)
+    private static final double TASA_CAMBIO = 1.10;
+    
+    public void setIdiomaBean(IdiomaBean idiomaBean) {
+        this.idiomaBean = idiomaBean;
+    }
+    
+    // ✅ NUEVO: Método para convertir precios
+    public double convertirPrecio(Double precio) {
+        if (precio == null) return 0.0;
+        if (isIdiomaIngles()) {
+            return precio * TASA_CAMBIO;
+        }
+        return precio;
+    }
+    
+    // ✅ NUEVO: Obtener símbolo de moneda
+    public String getSimboloMoneda() {
+        return isIdiomaIngles() ? "$" : "€";
+    }
+    
+    private boolean isIdiomaIngles() {
+        return idiomaBean != null && "en".equals(idiomaBean.getIdioma());
+    }
     
     private CarritoBean getCarritoBean() {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -52,11 +81,9 @@ public class ProductoBean {
         return lista;
     }
     
-    // MODIFICADO: Ahora se queda en la misma página
     public void agregarAlCarrito(Producto producto) {
         getCarritoBean().agregarProducto(producto);
         
-        // Mensaje de confirmación
         FacesContext.getCurrentInstance().addMessage(null, 
             new javax.faces.application.FacesMessage(
                 javax.faces.application.FacesMessage.SEVERITY_INFO,

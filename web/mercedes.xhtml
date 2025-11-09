@@ -83,9 +83,9 @@
                                 <div class="product-body">
                                     <h3 class="product-name">#{producto.nombre}</h3>
                                     <div class="product-price">
-                                        <h:outputText value="#{producto.precio}">
+                                        <h:outputText value="#{productoBean.convertirPrecio(producto.precio)}">
                                             <f:convertNumber type="currency" 
-                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
+                                                           currencySymbol="#{productoBean.simboloMoneda}" 
                                                            maxFractionDigits="0"/>
                                         </h:outputText>
                                     </div>

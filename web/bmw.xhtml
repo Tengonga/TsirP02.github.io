@@ -82,13 +82,13 @@
                                 </div>
                                 <div class="product-body">
                                     <h3 class="product-name">#{producto.nombre}</h3>
-                                    <div class="product-price">
-                                        <h:outputText value="#{producto.precio}">
-                                            <f:convertNumber type="currency" 
-                                                           currencySymbol="#{idiomaBean.idioma == 'es' ? '€' : '$'}" 
-                                                           maxFractionDigits="0"/>
-                                        </h:outputText>
-                                    </div>
+                                        <div class="product-price">
+                                            <h:outputText value="#{productoBean.convertirPrecio(producto.precio)}">
+                                                <f:convertNumber type="currency" 
+                                                               currencySymbol="#{productoBean.simboloMoneda}" 
+                                                               maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </div>
                                     <h:commandButton value="#{msg['app.agregar']}" 
                                                      action="#{productoBean.agregarAlCarrito(producto)}"
                                                      styleClass="btn btn-primary btn-add">
